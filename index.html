@@ -116,7 +116,7 @@
 
   <footer>
     البيانات من <a href="https://www.e-sangsin.com/eng/search" target="_blank" rel="noopener">الكتالوج الرسمي Hi-Q (Sangsin Brake)</a> — اضغط أي رقم للتحقق.<br>
-    «—» تعني فرامل طبل أو أن الرقم غير مُدرج؛ يُرجى التحقق قبل التركيب.<br>
+    «بنز (طبل)» تعني أن الخلفي حذاء فرامل طبل لا دسك — رقمه يبدأ بـ SA ونعمل على إضافته.<br>يُرجى التحقق من أي رقم قبل التركيب.<br>
     <span style="color:var(--accent); font-weight:700">محل الصافي</span> — لقطع غيار وفرامل السيارات
   </footer>
 </div>
@@ -228,8 +228,13 @@ function drawChips(){
     chipsEl.appendChild(c);
   });
 }
-function padCell(label,num){
+function padCell(label,num,isRear){
   let inner;
+  if(!num && isRear){
+    return '<div class="pad"><div class="lbl">'+label+'</div>'+
+      '<div class="num" style="color:var(--accent);font-size:calc(13px * var(--fs))">بنز (طبل)</div>'+
+      '<div class="stk" style="color:var(--muted)">حذاء فرامل — رقم SA</div></div>';
+  }
   if(num){
     inner='<div class="num">'+num.split('/').map(n=>
       '<a target="_blank" rel="noopener" title="تحقق من الكتالوج الرسمي" href="https://www.e-sangsin.com/eng/product_list?sc_number='+n.replace(/\D/g,'')+'">'+n+'</a>'
@@ -242,10 +247,11 @@ function render(){
   document.getElementById('clrBtn').style.display = qEl.value ? 'block' : 'none';
   const raw=norm(qEl.value.trim());
   const tokens=raw?raw.split(/\s+/).map(canon).filter(Boolean):[];
-  let wf=false,wr=false,year=null; const words=[];
+  let wf=false,wr=false,wb=false,year=null; const words=[];
   for(const t of tokens){
     if(/^(امامي|امام|الامامي|الاماميه|اماميه|front|frt)$/.test(t)){wf=true;continue;}
     if(/^(خلفي|خلف|الخلفي|الخلفيه|خلفيه|rear|rr)$/.test(t)){wr=true;continue;}
+    if(/^(بنز|بنزات|طبل|حذاء|احذيه|احذية)$/.test(t)){wb=true;continue;}
     const y=yearOf(t); if(y){year=y;continue;}
     words.push(t);
   }
@@ -254,6 +260,7 @@ function render(){
     if(activeBrand!=='الكل'&&d.ba!==activeBrand) continue;
     if(wf&&!d.f) continue;
     if(wr&&!d.r) continue;
+    if(wb&&d.r) continue;
     if(year&&!inYear(d.y,year)) continue;
     let ok=true,score=0;
     if(words.length){
@@ -269,12 +276,12 @@ function render(){
   }
   scored.sort((a,b)=>b[0]-a[0]);
   const rows=scored.map(x=>x[1]);
-  cntEl.textContent='عدد النتائج: '+rows.length+(year?' • سنة '+year:'')+(wf?' • أمامي':'')+(wr?' • خلفي':'');
+  cntEl.textContent='عدد النتائج: '+rows.length+(year?' • سنة '+year:'')+(wf?' • أمامي':'')+(wr?' • خلفي':'')+(wb?' • بنز (طبل)':'');
   if(!words.length && !year && !wf && !wr && activeBrand==='الكل'){
     resEl.innerHTML='<div class="empty">'+
       '<div style="font-size:1.15em;color:var(--accent);font-weight:700;margin-bottom:8px">'+DATA.length+' موديل جاهز للبحث</div>'+
       'اكتب اسم السيارة في الأعلى — مثال: <b>النترا 2013 امامي</b><br>'+
-      'أو اختر ماركة من الأزرار أعلاه، أو ابحث برقم القطعة مباشرة'+
+      'أو اختر ماركة، أو ابحث برقم القطعة، أو اكتب <b>بنز</b> لعرض سيارات الفرامل الطبل'+
       '</div>';
     LAST=[]; return;
   }
@@ -293,7 +300,7 @@ function cardHtml(d){
     '<div class="model">'+d.ma+' <span class="en">'+d.m+'</span></div>'+
     '<div class="years">موديل: '+(d.y||'—')+(d.e?' &bull; المحرك: '+d.e:'')+'</div>'+
     (d.al?'<div class="years" style="color:var(--blue);opacity:.85">يُعرف أيضاً: '+d.al.split(' ').slice(0,4).join(' • ')+'</div>':'')+
-    '<div class="pads">'+padCell('دسك أمامي',d.f)+padCell('دسك خلفي',d.r)+'</div></div>';
+    '<div class="pads">'+padCell('دسك أمامي',d.f,false)+padCell('دسك خلفي',d.r,true)+'</div></div>';
 }
 function paint(more){
   SHOWN = more ? Math.min(SHOWN+PAGE, LAST.length) : Math.min(PAGE, LAST.length);
