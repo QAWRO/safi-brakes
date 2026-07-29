@@ -292,6 +292,7 @@ function cardHtml(d){
     '<div class="brand">'+d.ba+' &bull; '+d.b+'</div>'+
     '<div class="model">'+d.ma+' <span class="en">'+d.m+'</span></div>'+
     '<div class="years">موديل: '+(d.y||'—')+(d.e?' &bull; المحرك: '+d.e:'')+'</div>'+
+    (d.al?'<div class="years" style="color:var(--blue);opacity:.85">يُعرف أيضاً: '+d.al.split(' ').slice(0,4).join(' • ')+'</div>':'')+
     '<div class="pads">'+padCell('دسك أمامي',d.f)+padCell('دسك خلفي',d.r)+'</div></div>';
 }
 function paint(more){
@@ -308,8 +309,8 @@ function clearQ(){ qEl.value=''; render(); qEl.focus(); }
 function ingest(j){
   META=j;
   DATA=j.rows.map(r=>{
-    const o={b:r[0],ba:r[1],m:r[2],ma:r[3],e:r[4],y:r[5],f:r[6],r:r[7]};
-    o._h=norm([o.b,o.ba,o.m,o.ma,o.y,o.f,o.r,o.e].join(' '));
+    const o={b:r[0],ba:r[1],m:r[2],ma:r[3],e:r[4],y:r[5],f:r[6],r:r[7],al:r[8]||''};
+    o._h=norm([o.b,o.ba,o.m,o.ma,o.y,o.f,o.r,o.e,o.al].join(' '));
     o._hw=o._h.split(/\s+/);
     return o;
   });

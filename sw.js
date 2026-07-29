@@ -1,6 +1,6 @@
 /* محل الصافي — Service Worker
    ارفع الرقم في CACHE عند كل تحديث للتطبيق */
-const CACHE = 'safi-v2';
+const CACHE = 'safi-v3';
 const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
