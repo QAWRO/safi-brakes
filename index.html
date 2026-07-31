@@ -231,9 +231,15 @@ function drawChips(){
 function padCell(label,num,isRear){
   let inner;
   if(!num && isRear){
+    const sa=arguments[3];
+    if(sa){
+      const links=sa.split('/').map(n=>'<a target="_blank" rel="noopener" href="https://www.e-sangsin.com/eng/product_list?sc_number='+n.replace(/\D/g,'')+'">'+n+'</a>').join('<span style="color:#555"> / </span>');
+      return '<div class="pad"><div class="lbl">بنز (حذاء طبل)</div><div class="num">'+links+'</div>'+
+        '<button class="cp" onclick="copyNum(\''+sa.replace(/'/g,'')+'\')">&#128203; نسخ</button></div>';
+    }
     return '<div class="pad"><div class="lbl">'+label+'</div>'+
       '<div class="num" style="color:var(--accent);font-size:calc(13px * var(--fs))">بنز (طبل)</div>'+
-      '<div class="stk" style="color:var(--muted)">حذاء فرامل — رقم SA</div></div>';
+      '<div class="stk" style="color:var(--muted)">الرقم غير مُدرج بعد</div></div>';
   }
   if(num){
     inner='<div class="num">'+num.split('/').map(n=>
@@ -264,20 +270,23 @@ function render(){
     if(year&&!inYear(d.y,year)) continue;
     let ok=true,score=0;
     if(words.length){
-      const hay=d._h, hw=d._hw;
+      const hay=d._h, hw=d._hw, nm=d._nm, nw=d._nw;
       for(const w of words){
-        if(hay.includes(w)){score+=2;continue;}
+        if(nw.includes(w)){ score+=400; continue; }          // كلمة كاملة في الاسم
+        if(nw.some(x=>x.startsWith(w))){ score+=200; continue; }  // بداية كلمة في الاسم
+        if(nm.includes(w)){ score+=60; continue; }            // داخل الاسم
+        if(hay.includes(w)){ score+=20; continue; }           // أي حقل آخر
         let fz=false;
         if(w.length>=4){ for(const h of hw){ if(lev1(w,h)){fz=true;break;} } }
-        if(fz) score+=1; else {ok=false;break;}
+        if(fz) score+=1; else {ok=false;break;}              // مطابقة ضبابية = أدنى أولوية
       }
     }
-    if(ok) scored.push([score,d]);
+    if(ok){ if(wb && d.sa) score+=500; scored.push([score,d]); }
   }
   scored.sort((a,b)=>b[0]-a[0]);
   const rows=scored.map(x=>x[1]);
   cntEl.textContent='عدد النتائج: '+rows.length+(year?' • سنة '+year:'')+(wf?' • أمامي':'')+(wr?' • خلفي':'')+(wb?' • بنز (طبل)':'');
-  if(!words.length && !year && !wf && !wr && activeBrand==='الكل'){
+  if(!words.length && !year && !wf && !wr && !wb && activeBrand==='الكل'){
     resEl.innerHTML='<div class="empty">'+
       '<div style="font-size:1.15em;color:var(--accent);font-weight:700;margin-bottom:8px">'+DATA.length+' موديل جاهز للبحث</div>'+
       'اكتب اسم السيارة في الأعلى — مثال: <b>النترا 2013 امامي</b><br>'+
@@ -300,7 +309,10 @@ function cardHtml(d){
     '<div class="model">'+d.ma+' <span class="en">'+d.m+'</span></div>'+
     '<div class="years">موديل: '+(d.y||'—')+(d.e?' &bull; المحرك: '+d.e:'')+'</div>'+
     (d.al?'<div class="years" style="color:var(--blue);opacity:.85">يُعرف أيضاً: '+d.al.split(' ').slice(0,4).join(' • ')+'</div>':'')+
-    '<div class="pads">'+padCell('دسك أمامي',d.f,false)+padCell('دسك خلفي',d.r,true)+'</div></div>';
+    '<div class="pads">'+padCell('دسك أمامي',d.f,false)+padCell('دسك خلفي',d.r,true,d.sa)+'</div>'+
+    ((d.r&&d.sa)?'<div class="years" style="color:var(--accent)">أو نسخة طبل — بنز: '+
+      d.sa.split('/').map(n=>'<a target="_blank" rel="noopener" style="color:var(--accent)" href="https://www.e-sangsin.com/eng/product_list?sc_number='+n.replace(/\D/g,'')+'">'+n+'</a>').join(' / ')+'</div>':'')+
+    '</div>';
 }
 function paint(more){
   SHOWN = more ? Math.min(SHOWN+PAGE, LAST.length) : Math.min(PAGE, LAST.length);
@@ -316,9 +328,11 @@ function clearQ(){ qEl.value=''; render(); qEl.focus(); }
 function ingest(j){
   META=j;
   DATA=j.rows.map(r=>{
-    const o={b:r[0],ba:r[1],m:r[2],ma:r[3],e:r[4],y:r[5],f:r[6],r:r[7],al:r[8]||''};
-    o._h=norm([o.b,o.ba,o.m,o.ma,o.y,o.f,o.r,o.e,o.al].join(' '));
+    const o={b:r[0],ba:r[1],m:r[2],ma:r[3],e:r[4],y:r[5],f:r[6],r:r[7],al:r[8]||'',sa:r[9]||''};
+    o._h=norm([o.b,o.ba,o.m,o.ma,o.y,o.f,o.r,o.e,o.al,o.sa].join(' '));
     o._hw=o._h.split(/\s+/);
+    o._nm=norm([o.ma,o.al,o.ba].join(' '));
+    o._nw=o._nm.split(/\s+/).filter(Boolean);
     return o;
   });
   document.getElementById('ver').innerHTML =
