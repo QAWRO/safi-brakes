@@ -132,6 +132,7 @@
   <div class="tabs">
     <button class="tabbtn on" id="tabDisc" onclick="setMode('disc')">&#128664; دسكات الفرامل</button>
     <button class="tabbtn" id="tabBearing" onclick="setMode('bearing')">&#9881;&#65039; بولبرن (بيرنق)</button>
+    <button class="tabbtn" id="tabWiper" onclick="setMode('wiper')">&#129386; ماسحات الزجاج</button>
   </div>
 
   <div class="searchbox">
@@ -152,6 +153,11 @@
   <footer id="footerBearing" style="display:none">
     بيانات البولبرن (البيرنق) من كتالوجي <a href="https://gmb.net/catalog/" target="_blank" rel="noopener">GMB</a> وILJIN الرسميين — اضغط أي رقم للتحقق.<br>
     التغطية الحالية تركّز على الماركات الشائعة بالعراق، ونعمل على إضافة KOYO لاحقاً.<br>يُرجى التحقق من أي رقم قبل التركيب.<br>
+    <span style="color:var(--accent); font-weight:700">محل الصافي</span> — لقطع غيار وفرامل السيارات
+  </footer>
+  <footer id="footerWiper" style="display:none">
+    بيانات ماسحات الزجاج من كتالوج <a href="https://www.bosch-mobility.com/" target="_blank" rel="noopener">Bosch</a> الرسمي (AeroTwin/AeroFit) — اضغط أي رقم للتحقق.<br>
+    التغطية الحالية: هيونداي وشيفروليه/ديو فقط، ونعمل على إضافة تويوتا وكيا ونيسان وميتسوبيشي وسوزوكي لاحقاً.<br>يُرجى التحقق من أي رقم قبل التركيب.<br>
     <span style="color:var(--accent); font-weight:700">محل الصافي</span> — لقطع غيار وفرامل السيارات
   </footer>
 </div>
@@ -252,6 +258,7 @@ function inYear(ys,y){
 let DATA=[], META={}, activeBrand='الكل';
 let MODE='disc';
 let BDATA=[], BMETA={}, activeBrandB='الكل', posFilterB='الكل';
+let WDATA=[], WMETA={}, activeBrandW='الكل';
 const qEl=document.getElementById('q'), resEl=document.getElementById('results'),
       cntEl=document.getElementById('count'), chipsEl=document.getElementById('chips'),
       posChipsEl=document.getElementById('posChips');
@@ -260,10 +267,14 @@ function setMode(m){
   MODE=m;
   document.getElementById('tabDisc').classList.toggle('on', m==='disc');
   document.getElementById('tabBearing').classList.toggle('on', m==='bearing');
+  document.getElementById('tabWiper').classList.toggle('on', m==='wiper');
   document.getElementById('footerDisc').style.display = m==='disc' ? '' : 'none';
   document.getElementById('footerBearing').style.display = m==='bearing' ? '' : 'none';
+  document.getElementById('footerWiper').style.display = m==='wiper' ? '' : 'none';
   posChipsEl.style.display = m==='bearing' ? 'flex' : 'none';
-  qEl.placeholder = m==='disc' ? 'اكتب: النترا 2013 امامي ، sonata ، SP1400 ...' : 'اكتب: كورولا امامي ، سوناتا خلفي ، 770-0345 ...';
+  qEl.placeholder = m==='disc' ? 'اكتب: النترا 2013 امامي ، sonata ، SP1400 ...'
+    : m==='bearing' ? 'اكتب: كورولا امامي ، سوناتا خلفي ، 770-0345 ...'
+    : 'اكتب: النترا ، افيو ، كروز ...';
   qEl.value='';
   drawPosChips(); drawChips(); renderVerLine(); render();
 }
@@ -286,6 +297,17 @@ function drawChips(){
       const c=document.createElement('button');
       c.className='chip'+(b===activeBrandB?' on':''); c.textContent=b;
       c.onclick=()=>{ activeBrandB=b; render(); };
+      chipsEl.appendChild(c);
+    });
+    return;
+  }
+  if(MODE==='wiper'){
+    const set=['الكل']; WDATA.forEach(d=>{ if(d.b&&!set.includes(d.b)) set.push(d.b); });
+    chipsEl.innerHTML='';
+    set.forEach(b=>{
+      const c=document.createElement('button');
+      c.className='chip'+(b===activeBrandW?' on':''); c.textContent=b;
+      c.onclick=()=>{ activeBrandW=b; render(); };
       chipsEl.appendChild(c);
     });
     return;
@@ -323,6 +345,7 @@ function padCell(label,num,isRear){
 function render(){
   document.getElementById('clrBtn').style.display = qEl.value ? 'block' : 'none';
   if(MODE==='bearing'){ renderBearing(); return; }
+  if(MODE==='wiper'){ renderWiper(); return; }
   renderDisc();
 }
 function renderDisc(){
@@ -379,7 +402,9 @@ function renderDisc(){
 let LAST=[], SHOWN=0;
 const PAGE=48;
 function cardHtml(d){
-  return MODE==='bearing' ? cardHtmlBearing(d) : cardHtmlDisc(d);
+  if(MODE==='bearing') return cardHtmlBearing(d);
+  if(MODE==='wiper') return cardHtmlWiper(d);
+  return cardHtmlDisc(d);
 }
 function cardHtmlDisc(d){
   return '<div class="card">'+
@@ -515,11 +540,103 @@ function renderVerLine(){
     verEl.innerHTML = parts.length
       ? parts.join(' • ')+' • '+BDATA.length+' نتيجة'
       : 'جارٍ التحميل…';
+  } else if(MODE==='wiper'){
+    verEl.innerHTML = WMETA.version
+      ? 'Bosch v'+(WMETA.version||'?')+' (تحديث '+(WMETA.updated||'?')+') • '+WDATA.length+' نتيجة'
+      : 'جارٍ التحميل…';
   } else {
     verEl.innerHTML = META.version
       ? 'الإصدار <b>'+(META.version||'?')+'</b> • تحديث '+(META.updated||'?')+' • '+DATA.length+' موديل'
       : 'جارٍ التحميل…';
   }
+}
+/* ================= ماسحات الزجاج ================= */
+function cardHtmlWiper(d){
+  const ar=AR_MODEL[d.m.toLowerCase().split(' (')[0]]||'';
+  return '<div class="card">'+
+    '<div class="brand">Bosch &bull; '+d.b+'</div>'+
+    '<div class="model">'+(ar?ar+' <span class="en">'+d.m+'</span>':d.m)+'</div>'+
+    '<div class="years">موديل: '+(d.y||'—')+'</div>'+
+    '<div class="pads">'+
+    '<div class="pad" style="flex:1"><div class="lbl">الأمامي (AeroTwin)</div>'+
+    '<div class="num">'+(d.f||'—')+'</div>'+
+    (d.f?'<button class="cp" onclick="copyNum(\''+d.f.replace(/'/g,'')+'\')">&#128203; نسخ</button>':'')+'</div>'+
+    '<div class="pad" style="flex:1"><div class="lbl">الخلفي</div>'+
+    '<div class="num'+(d.r?'':' none')+'">'+(d.r||'—')+'</div>'+
+    (d.r?'<button class="cp" onclick="copyNum(\''+d.r.replace(/'/g,'')+'\')">&#128203; نسخ</button>':'')+'</div>'+
+    '</div>'+
+    (d.alt?'<div class="years" style="color:var(--blue);opacity:.85">أرقام بديلة: '+d.alt+'</div>':'')+
+    '</div>';
+}
+function ingestWiper(j){
+  WMETA=j||{};
+  WDATA=(j&&j.rows||[]).map(r=>{
+    const o={b:r[0],m:r[1],y:r[2],f:r[3],r:r[4]||'',alt:r[5]||''};
+    const ar=AR_MODEL[o.m.toLowerCase().split(' (')[0]]||'';
+    o._h=norm([o.b,o.m,o.y,o.f,o.r,o.alt,ar].join(' '));
+    o._hw=o._h.split(/\s+/);
+    o._nm=norm([o.m,o.b,ar].join(' '));
+    o._nw=o._nm.split(/\s+/).filter(Boolean);
+    return o;
+  });
+  renderVerLine();
+}
+function renderWiper(){
+  const raw=norm(qEl.value.trim());
+  const tokens=raw?raw.split(/\s+/).map(canon).filter(Boolean):[];
+  let year=null; const words=[];
+  for(const t of tokens){
+    const y=yearOf(t); if(y){year=y;continue;}
+    words.push(t);
+  }
+  const scored=[];
+  for(const d of WDATA){
+    if(activeBrandW!=='الكل'&&d.b!==activeBrandW) continue;
+    if(year&&!inYear(d.y,year)) continue;
+    let ok=true,score=0;
+    if(words.length){
+      const hay=d._h, hw=d._hw, nm=d._nm, nw=d._nw;
+      for(const w of words){
+        if(nw.includes(w)){ score+=400; continue; }
+        if(nw.some(x=>x.startsWith(w))){ score+=200; continue; }
+        if(nm.includes(w)){ score+=60; continue; }
+        if(hay.includes(w)){ score+=20; continue; }
+        let fz=false;
+        if(w.length>=4){ for(const h of hw){ if(lev1(w,h)){fz=true;break;} } }
+        if(fz) score+=1; else {ok=false;break;}
+      }
+    }
+    if(ok) scored.push([score,d]);
+  }
+  scored.sort((a,b)=>b[0]-a[0]);
+  const rows=scored.map(x=>x[1]);
+  cntEl.textContent='عدد النتائج: '+rows.length+(year?' • سنة '+year:'');
+  if(!words.length && !year && activeBrandW==='الكل'){
+    resEl.innerHTML='<div class="empty">'+
+      '<div style="font-size:1.15em;color:var(--accent);font-weight:700;margin-bottom:8px">'+WDATA.length+' نتيجة ماسحات جاهزة للبحث</div>'+
+      'اكتب اسم السيارة في الأعلى — مثال: <b>النترا</b> أو <b>كروز</b><br>'+
+      'التغطية الحالية: هيونداي وشيفروليه/ديو — والباقي قيد الإضافة'+
+      '</div>';
+    LAST=[]; return;
+  }
+  if(!rows.length){
+    resEl.innerHTML='<div class="empty">لا نتائج مطابقة بعد لهذا الموديل<br><span style="font-size:.9em">التغطية قيد التوسيع — جرّب اسماً آخر</span></div>';
+    return;
+  }
+  LAST=rows;
+  paint();
+}
+async function loadWiperData(){
+  const cached=sget('wdata');
+  if(cached){ try{ ingestWiper(JSON.parse(cached)); if(MODE==='wiper'){drawChips();render();} }catch(e){} }
+  try{
+    const r=await fetch('wipers.json?t='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    sset('wdata', JSON.stringify(j));
+    ingestWiper(j);
+    if(MODE==='wiper'){ drawChips(); render(); }
+  }catch(e){}
 }
 async function loadBearingData(){
   const cached=sget('bdata2');
@@ -621,6 +738,7 @@ try{
   applyFs();
   loadData();
   loadBearingData();
+  loadWiperData();
   setInterval(()=>checkUpdate(false), 6*60*60*1000);
   window.addEventListener('online',()=>checkUpdate(false));
 }catch(err){

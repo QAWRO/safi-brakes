@@ -1,0 +1,1080 @@
+{
+"version": "1.0.0",
+"source": "Bosch AeroTwin/AeroFit official EU size chart",
+"updated": "2026-08-01",
+"count": 133,
+"columns": [
+"brand",
+"model",
+"years",
+"front_code",
+"rear_code",
+"alt_codes"
+],
+"rows": [
+[
+"Chevrolet",
+"Avalanche",
+"2001-2006",
+"AR550S",
+"H300",
+"550S / 550"
+],
+[
+"Chevrolet",
+"Aveo Hatchback (KL1S,T250/T255)",
+"2006-2011",
+"AR552S",
+"H382",
+"AF552 / 552"
+],
+[
+"Chevrolet",
+"Aveo Hatchback (KL1T,T300)",
+"2011-2017",
+"AM466S",
+"H801",
+""
+],
+[
+"Chevrolet",
+"Camaro Coupe",
+"2009-",
+"AR801S",
+"",
+"611S / 543"
+],
+[
+"Chevrolet",
+"Camaro Convertible",
+"2013-",
+"AR801S",
+"",
+"611S / 543"
+],
+[
+"Chevrolet",
+"Captiva (KL1C,C100)",
+"2006-2011",
+"AR601S",
+"H308",
+"AF601 / 601S / 612"
+],
+[
+"Chevrolet",
+"Captiva (KL1C,C140)",
+"2011-",
+"AR601S",
+"H308",
+"AF601 / 601S / 612"
+],
+[
+"Chevrolet",
+"Cobalt",
+"2013-",
+"AR653S",
+"",
+"653"
+],
+[
+"Chevrolet",
+"Corsa Utility",
+"2010-",
+"502S",
+"",
+"502"
+],
+[
+"Chevrolet",
+"Corvette Coupé",
+"1997-2003",
+"575S",
+"",
+"575U"
+],
+[
+"Chevrolet",
+"Cruze Station Wagon",
+"2012-",
+"AR291S",
+"",
+"291S"
+],
+[
+"Chevrolet",
+"Cruze (KL1J,J300)",
+"2009-",
+"AR291S",
+"",
+"291S"
+],
+[
+"Chevrolet",
+"Cruze Hatchback (KL1J,J305)",
+"2011-",
+"AR291S",
+"H358",
+"291S"
+],
+[
+"Chevrolet",
+"Epica (V250)",
+"2006-2011",
+"AR551S",
+"",
+"551S / 551"
+],
+[
+"Chevrolet",
+"Evanda (KL1L,V200)",
+"2003-2006",
+"AR551S",
+"",
+"551S / 551"
+],
+[
+"Chevrolet",
+"HHR",
+"2008-2009",
+"AR450S",
+"",
+"450S / 450"
+],
+[
+"Chevrolet",
+"Impala",
+"1999-2005",
+"575S",
+"",
+"575U"
+],
+[
+"Chevrolet",
+"Impala",
+"2013-",
+"AR604S",
+"",
+"AF604"
+],
+[
+"Chevrolet",
+"Kalos (KL1S,T200)",
+"2005-2006",
+"AR552S",
+"",
+"AF552 / 552"
+],
+[
+"Chevrolet",
+"Kalos Hatchback (KL1S,T200)",
+"2005-2008",
+"AR552S",
+"H380",
+"AF552 / 552"
+],
+[
+"Chevrolet",
+"Lacetti (KL1N,J200)",
+"2005-2013",
+"AR728S",
+"H420",
+"AF554 / 728S / 727"
+],
+[
+"Chevrolet",
+"Lanos",
+"2004-",
+"AR480S",
+"H480",
+"AF480 / 480S / 480"
+],
+[
+"Chevrolet",
+"Malibu (KL1G,V300)",
+"2012-2015",
+"AR607S",
+"",
+"AF607 / 607S"
+],
+[
+"Chevrolet",
+"Matiz (KL1K,M200)",
+"2005-2010",
+"AR553S",
+"H314",
+"553"
+],
+[
+"Chevrolet",
+"Niva",
+"2002-",
+"500S",
+"",
+"500 / 34C"
+],
+[
+"Chevrolet",
+"Nubira Station Wagon",
+"2005-2013",
+"AR728S",
+"",
+"AF554 / 728S / 727"
+],
+[
+"Chevrolet",
+"Nubira (KL1N,J200)",
+"2005-2013",
+"AR728S",
+"",
+"AF554 / 728S / 727"
+],
+[
+"Chevrolet",
+"Optra Hatchback (J200)",
+"2002-2014",
+"AR728S",
+"H420",
+"AF554 / 728S / 727"
+],
+[
+"Chevrolet",
+"Orlando",
+"2010-",
+"AR607S",
+"",
+"AF607 / 607S"
+],
+[
+"Chevrolet",
+"Prizm",
+"1989-2002",
+"AR502S",
+"",
+"AF502 / 502S / 502"
+],
+[
+"Chevrolet",
+"Rezzo (KL1U,U100)",
+"2005-2009",
+"AR604S",
+"H380",
+"AF604 / 607S"
+],
+[
+"Chevrolet",
+"Silverado 1500",
+"2006-2007",
+"AR550S",
+"H300",
+"550S / 550"
+],
+[
+"Chevrolet",
+"Silverado 2500 HD",
+"2007-2013",
+"AR550S",
+"H300",
+"550"
+],
+[
+"Chevrolet",
+"Sonic Hatchback (T300)",
+"2011-2018",
+"AM466S",
+"H801",
+""
+],
+[
+"Chevrolet",
+"Spark (KL1K,M200)",
+"2005-2010",
+"AR553S",
+"H314",
+"553"
+],
+[
+"Chevrolet",
+"Spark (M300)",
+"2009-",
+"AR553S",
+"H316",
+"578S / 577"
+],
+[
+"Chevrolet",
+"Suburban 1500",
+"2000-2002",
+"AR550S",
+"H300",
+"550S / 550"
+],
+[
+"Chevrolet",
+"Tahoe",
+"1999-2006",
+"A969S",
+"H300",
+"AR550S / 550S / 550"
+],
+[
+"Chevrolet",
+"Tahoe",
+"2006-2008",
+"A969S",
+"",
+""
+],
+[
+"Chevrolet",
+"TrailBlazer",
+"2001-2009",
+"AR550S",
+"",
+"550S / 550"
+],
+[
+"Chevrolet",
+"Trans Sport",
+"1996-",
+"AR609S",
+"",
+"603"
+],
+[
+"Chevrolet",
+"Traverse",
+"2008-",
+"A966S",
+"",
+""
+],
+[
+"Chevrolet",
+"Trax",
+"2012-",
+"A583S",
+"H251",
+""
+],
+[
+"Chevrolet",
+"Volt (1G1)",
+"2011-2014",
+"A636S",
+"",
+""
+],
+[
+"Hyundai",
+"Accent (LC)",
+"1999-2006",
+"AR502S",
+"",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Accent Hatchback (LC)",
+"1999-2006",
+"AR502S",
+"H450",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Accent Hatchback (MC)",
+"2006-2012",
+"AR552S",
+"H352",
+"AF552 / 552"
+],
+[
+"Hyundai",
+"Accent (RB)",
+"2010-",
+"AR653S",
+"",
+"653"
+],
+[
+"Hyundai",
+"Accent (X3)",
+"1994-1999",
+"AR502S",
+"H500",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Accent Hatchback (X3)",
+"1994-1999",
+"AR502S",
+"H500",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Accent Blue (RB)",
+"2011-",
+"AR653S",
+"",
+"653"
+],
+[
+"Hyundai",
+"Atos (MX)",
+"1997-2003",
+"361",
+"H341",
+""
+],
+[
+"Hyundai",
+"Atos Prime (MX)",
+"1999-2008",
+"361",
+"H341",
+""
+],
+[
+"Hyundai",
+"Coupé Coupé (FX)",
+"1996-",
+"AR531S",
+"",
+"AF531 / 531S / 531"
+],
+[
+"Hyundai",
+"Coupé Coupé (GK)",
+"2001-2009",
+"AR531S",
+"H500",
+"AF531 / 531S / 531"
+],
+[
+"Hyundai",
+"Coupé Coupé (RD)",
+"1996-2002",
+"AR531S",
+"H500",
+"AF531 / 531S / 531"
+],
+[
+"Hyundai",
+"Creta",
+"2016-",
+"AR653S",
+"H281",
+"653"
+],
+[
+"Hyundai",
+"Elantra (AD)",
+"2016-",
+"AR653S",
+"",
+"653"
+],
+[
+"Hyundai",
+"Elantra (HD)",
+"2005-",
+"AR502S",
+"",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Elantra (J1)",
+"1990-1995",
+"AR502S",
+"",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Elantra (J2)",
+"1995-2000",
+"AR502S",
+"H500",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Elantra (MD,UD)",
+"2011-",
+"AR654S",
+"",
+"654"
+],
+[
+"Hyundai",
+"Elantra Hatchback (XD)",
+"2000-2006",
+"AR502S",
+"H500",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Eon",
+"2011-",
+"AR553S",
+"",
+"553"
+],
+[
+"Hyundai",
+"Equus (VI)",
+"2009-2012",
+"A929S",
+"",
+""
+],
+[
+"Hyundai",
+"Equus (VI)",
+"2012-",
+"AR607S",
+"",
+"AF607 / 607S"
+],
+[
+"Hyundai",
+"Excel (X3)",
+"1994-1999",
+"AR502S",
+"H500",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Excel Hatchback (X3)",
+"1995-1999",
+"AR502S",
+"H500",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Galloper",
+"1997-2001",
+"AR450S",
+"",
+"450"
+],
+[
+"Hyundai",
+"Genesis Sedan (BH)",
+"2011-2016",
+"AR607S",
+"",
+"AF607 / 607S"
+],
+[
+"Hyundai",
+"Genesis Coupe (BK)",
+"2008-2016",
+"A606S",
+"",
+"607S"
+],
+[
+"Hyundai",
+"Genesis Sedan (DH)",
+"2014-",
+"AR653S",
+"",
+""
+],
+[
+"Hyundai",
+"Getz (TB)",
+"2002-2009",
+"AR553S",
+"H341",
+"553"
+],
+[
+"Hyundai",
+"Grand Santa Fe (NC)",
+"2013-",
+"AR654S",
+"",
+"654"
+],
+[
+"Hyundai",
+"Grandeur (TG)",
+"2005-",
+"A606S",
+"",
+"607S"
+],
+[
+"Hyundai",
+"H 100",
+"1996-",
+"AR450S",
+"H400",
+"450S / 450"
+],
+[
+"Hyundai",
+"H 350",
+"2014-",
+"AR65N",
+"",
+"AR60N / 650U / 600U"
+],
+[
+"Hyundai",
+"H-1 (A1)",
+"1997-2007",
+"AR701S",
+"H400",
+"701"
+],
+[
+"Hyundai",
+"H-1 (TQ)",
+"2008-",
+"A606S",
+"H352",
+"606S"
+],
+[
+"Hyundai",
+"i10 (AC3)",
+"2020-",
+"AR612S",
+"H284",
+"612"
+],
+[
+"Hyundai",
+"i10 (IA)",
+"2013-",
+"AR552S",
+"H275",
+"AF552 / 552"
+],
+[
+"Hyundai",
+"i10 (PA)",
+"2007-",
+"AR552S",
+"H317",
+"AF552 / 552"
+],
+[
+"Hyundai",
+"i20 (BC3)",
+"2020-",
+"A991S",
+"H301",
+""
+],
+[
+"Hyundai",
+"i20 (GB)",
+"2014-",
+"AR612S",
+"H301",
+"612"
+],
+[
+"Hyundai",
+"i20 (PB)",
+"2008-",
+"AR601S",
+"H309",
+"AF601 / 601S / 612"
+],
+[
+"Hyundai",
+"i30 (FD)",
+"2007-2010",
+"A187S",
+"H312",
+""
+],
+[
+"Hyundai",
+"i30 CW (FD)",
+"2008-2010",
+"A187S",
+"H312",
+""
+],
+[
+"Hyundai",
+"i30 CW (FD)",
+"2010-2012",
+"AR604S",
+"H312",
+"AF604 / 604S"
+],
+[
+"Hyundai",
+"i30 (FD)",
+"2010-2013",
+"AR604S",
+"H312",
+"AF604 / 604S"
+],
+[
+"Hyundai",
+"i30 (GD)",
+"2011-",
+"AR654S",
+"",
+"654 / A310H"
+],
+[
+"Hyundai",
+"i30 CW (GD)",
+"2012-",
+"AR654S",
+"",
+"654 / A310H"
+],
+[
+"Hyundai",
+"i30 Coupé (GD)",
+"2013-",
+"AR654S",
+"",
+"654 / A310H"
+],
+[
+"Hyundai",
+"i30 (PD)",
+"2016-",
+"AR653S",
+"H318",
+"653"
+],
+[
+"Hyundai",
+"i30 CW (PD)",
+"2017-",
+"AR653S",
+"H318",
+"653"
+],
+[
+"Hyundai",
+"i30 Fastback (PD)",
+"2017-",
+"AR653S",
+"H318",
+"653"
+],
+[
+"Hyundai",
+"i35",
+"2011-",
+"AR654S",
+"",
+"654"
+],
+[
+"Hyundai",
+"i40 CW (VF)",
+"2011-",
+"AR653S",
+"H352",
+"653S / 653"
+],
+[
+"Hyundai",
+"Ioniq (AE)",
+"2016-",
+"AR813S",
+"",
+"803"
+],
+[
+"Hyundai",
+"ix20 (JC)",
+"2010-",
+"A583S",
+"H301",
+""
+],
+[
+"Hyundai",
+"ix35 (LM/EL)",
+"2010-",
+"AR601S",
+"H312",
+"AF601 / 601S / 612"
+],
+[
+"Hyundai",
+"ix55 (EN)",
+"2008-2012",
+"A296S",
+"",
+""
+],
+[
+"Hyundai",
+"Kona (OS)",
+"2017-",
+"AR653S",
+"H281",
+"653"
+],
+[
+"Hyundai",
+"Lantra (J1)",
+"1990-1995",
+"AR502S",
+"",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Lantra Kombi (J2)",
+"1995-2000",
+"AR502S",
+"H341",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Matrix (FC)",
+"2001-2010",
+"AR552S",
+"H341",
+"AF552 / 552"
+],
+[
+"Hyundai",
+"Nexo (FE)",
+"2018-",
+"AR653S",
+"H352",
+"653"
+],
+[
+"Hyundai",
+"Pony (X3)",
+"1994-1999",
+"AR502S",
+"H500",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Porter 507",
+"2000-2003",
+"AR450S",
+"",
+"450S / 450"
+],
+[
+"Hyundai",
+"Santa Fe (CM)",
+"2006-2012",
+"AR604S",
+"H352",
+"AF604 / 604S"
+],
+[
+"Hyundai",
+"Santa Fe (DM)",
+"2012-",
+"AR654S",
+"H326",
+"654"
+],
+[
+"Hyundai",
+"Santa Fe (SM)",
+"1999-2005",
+"AR551S",
+"H340",
+"551S / 551"
+],
+[
+"Hyundai",
+"Santa Fe (TM)",
+"2018-",
+"AR653S",
+"",
+"653 / A302H"
+],
+[
+"Hyundai",
+"Scoupe",
+"1990-1995",
+"AR566S",
+"",
+"481S / 481"
+],
+[
+"Hyundai",
+"Solaris Hatchback (RB)",
+"2011-",
+"AR653S",
+"H281",
+"653"
+],
+[
+"Hyundai",
+"Solaris (YC)",
+"2017-",
+"AR601S",
+"",
+"AF601 / 612"
+],
+[
+"Hyundai",
+"Sonata (YF)",
+"2009-",
+"AR813S",
+"",
+"803"
+],
+[
+"Hyundai",
+"Sonata II (Y3)",
+"1993-1998",
+"AR500S",
+"",
+"500S / 500"
+],
+[
+"Hyundai",
+"Sonata III (EF)",
+"1998-2001",
+"AR500S",
+"",
+"500S / 500"
+],
+[
+"Hyundai",
+"Sonata IV (EF)",
+"2001-2005",
+"AR551S",
+"",
+"551S / 551"
+],
+[
+"Hyundai",
+"Sonata IV (TM)",
+"2018-",
+"A302H",
+"",
+""
+],
+[
+"Hyundai",
+"Sonata V (NF)",
+"2004-2010",
+"A606S",
+"",
+""
+],
+[
+"Hyundai",
+"Starex",
+"1997-2007",
+"AR701S",
+"H400",
+"701"
+],
+[
+"Hyundai",
+"Starex",
+"2007-",
+"A606S",
+"H352",
+"701"
+],
+[
+"Hyundai",
+"Terracan (HP)",
+"2001-2006",
+"AR551S",
+"H400",
+"551S / 551"
+],
+[
+"Hyundai",
+"Trajet (FO)",
+"2000-2007",
+"AR655S",
+"H400",
+"655"
+],
+[
+"Hyundai",
+"Tucson (JM)",
+"2004-2010",
+"AR601S",
+"H308",
+"AF601 / 601S / 612"
+],
+[
+"Hyundai",
+"Tucson (TL)",
+"2015-",
+"AR653S",
+"H352",
+"653"
+],
+[
+"Hyundai",
+"Tucson IV (NX4)",
+"2020-",
+"A945S",
+"H275",
+""
+],
+[
+"Hyundai",
+"Veloster",
+"2011-",
+"AR813S",
+"",
+""
+],
+[
+"Hyundai",
+"Veracruz",
+"2006-",
+"A296S",
+"",
+""
+],
+[
+"Hyundai",
+"Verna (LC)",
+"1999-2006",
+"AR502S",
+"",
+"AF502 / 502S / 502"
+],
+[
+"Hyundai",
+"Verna (MC)",
+"2006-2011",
+"AR533S",
+"",
+"AF531 / 533S / 533"
+],
+[
+"Hyundai",
+"XG (F)",
+"1998-2005",
+"AR551S",
+"",
+"551S / 551"
+]
+]
+}

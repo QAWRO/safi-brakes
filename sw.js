@@ -1,6 +1,6 @@
 /* محل الصافي — Service Worker
    ارفع الرقم في CACHE عند كل تحديث للتطبيق */
-const CACHE = 'safi-v12';
+const CACHE = 'safi-v13';
 const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './logo-header.png'];
 
 self.addEventListener('install', e => {
@@ -21,9 +21,10 @@ self.addEventListener('fetch', e => {
   if (url.origin !== location.origin) return;
 
   // البيانات: الشبكة أولاً (ليصل التحديث) ثم النسخة المحفوظة
-  if (url.pathname.endsWith('data.json') || url.pathname.endsWith('bearing.json') || url.pathname.endsWith('iljin.json')) {
+  if (url.pathname.endsWith('data.json') || url.pathname.endsWith('bearing.json') || url.pathname.endsWith('iljin.json') || url.pathname.endsWith('wipers.json')) {
     const file = url.pathname.endsWith('bearing.json') ? './bearing.json'
-      : url.pathname.endsWith('iljin.json') ? './iljin.json' : './data.json';
+      : url.pathname.endsWith('iljin.json') ? './iljin.json'
+      : url.pathname.endsWith('wipers.json') ? './wipers.json' : './data.json';
     e.respondWith(
       fetch(req).then(r => {
         const cp = r.clone();
