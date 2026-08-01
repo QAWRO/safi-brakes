@@ -22,10 +22,14 @@
     background-attachment:fixed;
     color:var(--text); font-family:'Tajawal',Segoe UI,Tahoma,sans-serif; min-height:100vh}
   .container{max-width:1100px; margin:0 auto; padding:14px 14px 70px}
-  header{text-align:center; padding:14px 0 4px}
-  .logo{display:inline-block; background:var(--grad); color:#05100f; font-weight:800; font-size:21px;
-    padding:3px 15px; border-radius:8px; letter-spacing:1px; transform:skewX(-8deg);
-    box-shadow:0 4px 18px rgba(22,224,196,.25)}
+  header{text-align:center; padding:18px 0 4px; position:relative}
+  header::before{content:""; position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+    width:220px; height:220px; border-radius:50%;
+    background:radial-gradient(circle, rgba(22,224,196,.14) 0%, rgba(0,0,0,.55) 65%, transparent 75%);
+    filter:blur(2px); z-index:0}
+  header > *{position:relative; z-index:1}
+  .logo{display:block; margin:0 auto; height:84px; width:auto;
+    filter:drop-shadow(0 6px 20px rgba(22,224,196,.35))}
   .shop{margin-top:9px; font-size:calc(23px * var(--fs)); font-weight:800; color:var(--accent)}
   .shop::before{content:"\2726"; margin-inline-end:8px; color:var(--accent2)}
   .shop::after{content:"\2726"; margin-inline-start:8px; color:var(--accent2)}
@@ -62,8 +66,8 @@
   .card{background:linear-gradient(155deg, var(--card) 0%, #081312 100%);
     border:1px solid var(--border); border-radius:13px; padding:14px;
     display:flex; flex-direction:column; gap:8px; position:relative; overflow:hidden}
-  .card::before{content:""; position:absolute; inset:0 0 auto 0; height:2px;
-    background:var(--grad); opacity:.55}
+  .card::before{content:""; position:absolute; inset:0 0 auto 0; height:3px;
+    background:linear-gradient(90deg, #000, var(--accent2), var(--accent), #000); opacity:.75}
   .card .brand{font-size:calc(11px * var(--fs)); color:var(--accent); font-weight:700}
   .card .model{font-size:calc(17px * var(--fs)); font-weight:800}
   .card .model .en{color:var(--muted); font-weight:500; font-size:calc(12px * var(--fs))}
@@ -95,10 +99,12 @@
     opacity:0; transition:opacity .25s; pointer-events:none; z-index:99}
   .toast.on{opacity:1}
 
-  .tabs{display:flex; gap:8px; margin:14px 0 2px}
-  .tabbtn{flex:1; padding:11px 10px; border-radius:11px; background:var(--card); border:1px solid var(--border);
-    color:var(--muted); font-family:inherit; font-size:calc(14px * var(--fs)); font-weight:700; cursor:pointer}
-  .tabbtn.on{background:var(--grad); color:#05100f; border-color:var(--accent)}
+  .tabs{display:flex; gap:8px; margin:14px 0 2px; padding:6px; border-radius:14px;
+    background:linear-gradient(160deg, #000 0%, #061412 100%); border:1px solid var(--border)}
+  .tabbtn{flex:1; padding:11px 10px; border-radius:10px; background:transparent; border:1px solid transparent;
+    color:var(--muted); font-family:inherit; font-size:calc(14px * var(--fs)); font-weight:700; cursor:pointer;
+    transition:background .15s, color .15s}
+  .tabbtn.on{background:var(--grad); color:#05100f; border-color:var(--accent); box-shadow:0 3px 14px rgba(22,224,196,.3)}
   .pos{display:inline-block; font-size:calc(11px * var(--fs)); color:var(--bg); background:var(--accent);
     padding:2px 8px; border-radius:999px; font-weight:700; margin-inline-start:6px}
 </style>
@@ -106,9 +112,9 @@
 <body>
 <div class="container">
   <header>
-    <span class="logo">Hi-Q</span>
+    <img class="logo" src="logo-header.png" alt="محل الصافي">
     <div class="shop">محل الصافي</div>
-    <div class="sub">دليل أرقام دسكات الفرامل — كتالوج Hi-Q الرسمي</div>
+    <div class="sub">دليل أرقام دسكات الفرامل والبولبرن — كتالوجات رسمية</div>
     <div class="ver" id="ver">جارٍ التحميل…</div>
     <div class="topbar">
       <span class="flbl">حجم الخط</span>
@@ -133,6 +139,7 @@
     <input id="q" type="text" placeholder="اكتب: النترا 2013 امامي ، sonata ، SP1400 ..." autocomplete="off">
     <button class="clr" id="clrBtn" onclick="clearQ()">&#10006;</button>
   </div>
+  <div class="chips" id="posChips" style="display:none"></div>
   <div class="chips" id="chips"></div>
   <div class="meta"><span id="count"></span></div>
   <div class="grid" id="results"><div class="loading">جارٍ تحميل الكتالوج…</div></div>
@@ -143,8 +150,8 @@
     <span style="color:var(--accent); font-weight:700">محل الصافي</span> — لقطع غيار وفرامل السيارات
   </footer>
   <footer id="footerBearing" style="display:none">
-    بيانات البولبرن (البيرنق) من كتالوج <a href="https://gmb.net/catalog/" target="_blank" rel="noopener">GMB</a> الرسمي — اضغط أي رقم للتحقق.<br>
-    التغطية الحالية تركّز على الماركات الشائعة بالعراق، ونعمل على إضافة ILJIN وKOYO لاحقاً.<br>يُرجى التحقق من أي رقم قبل التركيب.<br>
+    بيانات البولبرن (البيرنق) من كتالوجي <a href="https://gmb.net/catalog/" target="_blank" rel="noopener">GMB</a> وILJIN الرسميين — اضغط أي رقم للتحقق.<br>
+    التغطية الحالية تركّز على الماركات الشائعة بالعراق، ونعمل على إضافة KOYO لاحقاً.<br>يُرجى التحقق من أي رقم قبل التركيب.<br>
     <span style="color:var(--accent); font-weight:700">محل الصافي</span> — لقطع غيار وفرامل السيارات
   </footer>
 </div>
@@ -244,9 +251,10 @@ function inYear(ys,y){
 /* ================= الحالة ================= */
 let DATA=[], META={}, activeBrand='الكل';
 let MODE='disc';
-let BDATA=[], BMETA={}, activeBrandB='الكل';
+let BDATA=[], BMETA={}, activeBrandB='الكل', posFilterB='الكل';
 const qEl=document.getElementById('q'), resEl=document.getElementById('results'),
-      cntEl=document.getElementById('count'), chipsEl=document.getElementById('chips');
+      cntEl=document.getElementById('count'), chipsEl=document.getElementById('chips'),
+      posChipsEl=document.getElementById('posChips');
 
 function setMode(m){
   MODE=m;
@@ -254,9 +262,21 @@ function setMode(m){
   document.getElementById('tabBearing').classList.toggle('on', m==='bearing');
   document.getElementById('footerDisc').style.display = m==='disc' ? '' : 'none';
   document.getElementById('footerBearing').style.display = m==='bearing' ? '' : 'none';
+  posChipsEl.style.display = m==='bearing' ? 'flex' : 'none';
   qEl.placeholder = m==='disc' ? 'اكتب: النترا 2013 امامي ، sonata ، SP1400 ...' : 'اكتب: كورولا امامي ، سوناتا خلفي ، 770-0345 ...';
   qEl.value='';
-  drawChips(); render();
+  drawPosChips(); drawChips(); render();
+}
+function drawPosChips(){
+  if(MODE!=='bearing'){ posChipsEl.innerHTML=''; return; }
+  const opts=[['الكل','الكل'],['أمامي','Front'],['خلفي','Rear']];
+  posChipsEl.innerHTML='';
+  opts.forEach(([label,val])=>{
+    const c=document.createElement('button');
+    c.className='chip'+(posFilterB===val?' on':''); c.textContent=label;
+    c.onclick=()=>{ posFilterB=val; drawPosChips(); render(); };
+    posChipsEl.appendChild(c);
+  });
 }
 function drawChips(){
   if(MODE==='bearing'){
@@ -384,21 +404,24 @@ function clearQ(){ qEl.value=''; render(); qEl.focus(); }
 
 /* ================= بولبرن (بيرنق) ================= */
 function cardHtmlBearing(d){
-  const link='https://gmb.net/product/'+encodeURIComponent(d.part)+'/';
   const ar=AR_MODEL[d.m.toLowerCase()]||'';
+  const src=d.src||'GMB';
+  const numHtml = src==='GMB'
+    ? '<a target="_blank" rel="noopener" href="https://gmb.net/product/'+encodeURIComponent(d.part)+'/">'+d.part+'</a>'
+    : d.part;
   return '<div class="card">'+
-    '<div class="brand">GMB &bull; '+d.ba+'</div>'+
+    '<div class="brand">'+src+' &bull; '+d.ba+'</div>'+
     '<div class="model">'+(ar?ar+' <span class="en">'+d.m+'</span>':d.m)+'<span class="pos">'+(d.pos||'—')+'</span></div>'+
     '<div class="years">موديل: '+(d.y||'—')+(d.e?' &bull; المحرك: '+d.e:'')+'</div>'+
-    '<div class="pads"><div class="pad" style="flex:1"><div class="lbl">رقم البلبرنك (GMB)</div>'+
-    '<div class="num"><a target="_blank" rel="noopener" href="'+link+'">'+d.part+'</a></div>'+
+    '<div class="pads"><div class="pad" style="flex:1"><div class="lbl">رقم البلبرنك ('+src+')</div>'+
+    '<div class="num">'+numHtml+'</div>'+
     '<button class="cp" onclick="copyNum(\''+d.part.replace(/'/g,'')+'\')">&#128203; نسخ</button></div></div>'+
     '</div>';
 }
 function renderBearing(){
   const raw=norm(qEl.value.trim());
   const tokens=raw?raw.split(/\s+/).map(canon).filter(Boolean):[];
-  let wf=false,wr=false,year=null; const words=[];
+  let wf=posFilterB==='Front',wr=posFilterB==='Rear',year=null; const words=[];
   for(const t of tokens){
     if(/^(امامي|امام|الامامي|الاماميه|اماميه|front|frt)$/.test(t)){wf=true;continue;}
     if(/^(خلفي|خلف|الخلفي|الخلفيه|خلفيه|rear|rr)$/.test(t)){wr=true;continue;}
@@ -433,7 +456,7 @@ function renderBearing(){
     resEl.innerHTML='<div class="empty">'+
       '<div style="font-size:1.15em;color:var(--accent);font-weight:700;margin-bottom:8px">'+BDATA.length+' نتيجة بولبرن جاهزة للبحث</div>'+
       'اكتب اسم السيارة في الأعلى — مثال: <b>كورولا امامي</b><br>'+
-      'التغطية الحالية من كتالوج GMB للماركات الشائعة بالعراق'+
+      'التغطية الحالية من كتالوجي GMB وILJIN للماركات الشائعة بالعراق'+
       '</div>';
     LAST=[]; return;
   }
@@ -464,10 +487,9 @@ const AR_MODEL={
   "cherokee":"شيروكي","grand cherokee":"جراند شيروكي","wrangler":"رانجلر","compass":"كومباس",
   "mustang":"موستنج","escape":"اسكيب","edge":"ايدج"
 };
-function ingestBearing(j){
-  BMETA=j;
-  BDATA=(j.rows||[]).map(r=>{
-    const o={ba:r[0],m:r[1],y:r[2],pos:r[3],part:r[4],e:r[5]||''};
+function rowsToBData(j, src){
+  return (j.rows||[]).map(r=>{
+    const o={ba:r[0],m:r[1],y:r[2],pos:r[3],part:r[4],e:r[5]||'',src:src};
     const ar=AR_MODEL[o.m.toLowerCase()]||'';
     o._h=norm([o.ba,o.m,o.y,o.pos,o.part,o.e,ar].join(' '));
     o._hw=o._h.split(/\s+/);
@@ -476,15 +498,25 @@ function ingestBearing(j){
     return o;
   });
 }
+function ingestBearing(gmbJ, iljinJ){
+  BMETA={gmb:gmbJ||null, iljin:iljinJ||null};
+  BDATA=[].concat(
+    gmbJ ? rowsToBData(gmbJ,'GMB') : [],
+    iljinJ ? rowsToBData(iljinJ,'ILJIN') : []
+  );
+}
 async function loadBearingData(){
-  const cached=sget('bdata');
-  if(cached){ try{ ingestBearing(JSON.parse(cached)); if(MODE==='bearing'){drawChips();render();} }catch(e){} }
+  const cached=sget('bdata2');
+  if(cached){ try{ const c=JSON.parse(cached); ingestBearing(c.gmb,c.iljin); if(MODE==='bearing'){drawChips();render();} }catch(e){} }
   try{
-    const r=await fetch('bearing.json?t='+Date.now(),{cache:'no-store'});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const j=await r.json();
-    sset('bdata', JSON.stringify(j));
-    ingestBearing(j);
+    const [r1,r2]=await Promise.all([
+      fetch('bearing.json?t='+Date.now(),{cache:'no-store'}),
+      fetch('iljin.json?t='+Date.now(),{cache:'no-store'})
+    ]);
+    const j1=r1.ok?await r1.json():null;
+    const j2=r2.ok?await r2.json():null;
+    sset('bdata2', JSON.stringify({gmb:j1, iljin:j2}));
+    ingestBearing(j1,j2);
     if(MODE==='bearing'){ drawChips(); render(); }
   }catch(e){}
 }
