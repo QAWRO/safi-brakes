@@ -223,6 +223,7 @@
     <button class="tabbtn on" id="tabDisc" onclick="setMode('disc')">&#128664; دسكات الفرامل</button>
     <button class="tabbtn" id="tabBearing" onclick="setMode('bearing')">&#9881;&#65039; بولبرن (بيرنق)</button>
     <button class="tabbtn" id="tabWiper" onclick="setMode('wiper')">&#129386; ماسحات الزجاج</button>
+    <button class="tabbtn" id="tabBelt" onclick="setMode('belt')">&#128736;&#65039; قوايش</button>
   </div>
 
   <div class="searchbox">
@@ -248,6 +249,11 @@
   <footer id="footerWiper" style="display:none">
     بيانات ماسحات الزجاج من كتالوج <a href="https://www.bosch-mobility.com/" target="_blank" rel="noopener">Bosch</a> الرسمي (AeroTwin/AeroFit) — اضغط أي رقم للتحقق.<br>
     التغطية الحالية: هيونداي وشيفروليه/ديو فقط، ونعمل على إضافة تويوتا وكيا ونيسان وميتسوبيشي وسوزوكي لاحقاً.<br>يُرجى التحقق من أي رقم قبل التركيب.<br>
+    <span style="color:var(--accent); font-weight:700">محل الصافي</span> — لقطع غيار وفرامل السيارات
+  </footer>
+  <footer id="footerBelt" style="display:none">
+    بيانات القوايش من الوكيل الرسمي الوحيد في العراق لقوايش <b>متسوبا (MITSUBA AL-MAS)</b> — بغداد، السنك.<br>
+    للتواصل: 07904295996 — 07702505211 — مستعدون لتصنيع وتجهيز أي حجم قايش حسب الطلب.<br>يُرجى التحقق من أي رقم قبل التركيب.<br>
     <span style="color:var(--accent); font-weight:700">محل الصافي</span> — لقطع غيار وفرامل السيارات
   </footer>
 </div>
@@ -401,6 +407,7 @@ let DATA=[], META={}, activeBrand='الكل';
 let MODE='disc';
 let BDATA=[], BMETA={}, activeBrandB='الكل', posFilterB='الكل';
 let WDATA=[], WMETA={}, activeBrandW='الكل';
+let LDATA=[], LMETA={}, activeTypeL='الكل';
 const qEl=document.getElementById('q'), resEl=document.getElementById('results'),
       cntEl=document.getElementById('count'), chipsEl=document.getElementById('chips'),
       posChipsEl=document.getElementById('posChips');
@@ -410,12 +417,15 @@ function setMode(m){
   document.getElementById('tabDisc').classList.toggle('on', m==='disc');
   document.getElementById('tabBearing').classList.toggle('on', m==='bearing');
   document.getElementById('tabWiper').classList.toggle('on', m==='wiper');
+  document.getElementById('tabBelt').classList.toggle('on', m==='belt');
   document.getElementById('footerDisc').style.display = m==='disc' ? '' : 'none';
   document.getElementById('footerBearing').style.display = m==='bearing' ? '' : 'none';
   document.getElementById('footerWiper').style.display = m==='wiper' ? '' : 'none';
+  document.getElementById('footerBelt').style.display = m==='belt' ? '' : 'none';
   posChipsEl.style.display = m==='bearing' ? 'flex' : 'none';
   qEl.placeholder = m==='disc' ? 'اكتب: النترا 2013 امامي ، sonata ، SP1400 ...'
     : m==='bearing' ? 'اكتب: كورولا امامي ، سوناتا خلفي ، 770-0345 ...'
+    : m==='belt' ? 'اكتب: كورولا ، سوناتا ، 6PK1200 ...'
     : 'اكتب: النترا ، افيو ، كروز ...';
   qEl.value='';
   drawPosChips(); drawChips(); renderVerLine(); render();
@@ -454,6 +464,17 @@ function drawChips(){
     });
     return;
   }
+  if(MODE==='belt'){
+    const set=['الكل']; LDATA.forEach(d=>{ if(d.t&&!set.includes(d.t)) set.push(d.t); });
+    chipsEl.innerHTML='';
+    set.forEach(t=>{
+      const c=document.createElement('button');
+      c.className='chip'+(t===activeTypeL?' on':''); c.textContent=t;
+      c.onclick=()=>{ activeTypeL=t; render(); };
+      chipsEl.appendChild(c);
+    });
+    return;
+  }
   const set=['الكل']; DATA.forEach(d=>{ if(d.ba&&!set.includes(d.ba)) set.push(d.ba); });
   chipsEl.innerHTML='';
   set.forEach(b=>{
@@ -488,6 +509,7 @@ function render(){
   document.getElementById('clrBtn').style.display = qEl.value ? 'block' : 'none';
   if(MODE==='bearing'){ renderBearing(); return; }
   if(MODE==='wiper'){ renderWiper(); return; }
+  if(MODE==='belt'){ renderBelt(); return; }
   renderDisc();
 }
 function renderDisc(){
@@ -546,6 +568,7 @@ const PAGE=48;
 function cardHtml(d){
   if(MODE==='bearing') return cardHtmlBearing(d);
   if(MODE==='wiper') return cardHtmlWiper(d);
+  if(MODE==='belt') return cardHtmlBelt(d);
   return cardHtmlDisc(d);
 }
 function cardHtmlDisc(d){
@@ -747,6 +770,10 @@ function renderVerLine(){
     verEl.innerHTML = WMETA.version
       ? 'Bosch v'+(WMETA.version||'?')+' (تحديث '+(WMETA.updated||'?')+') • '+WDATA.length+' نتيجة'
       : 'جارٍ التحميل…';
+  } else if(MODE==='belt'){
+    verEl.innerHTML = LMETA.version
+      ? 'MITSUBA v'+(LMETA.version||'?')+' (تحديث '+(LMETA.updated||'?')+') • '+LDATA.length+' نتيجة'
+      : 'جارٍ التحميل…';
   } else {
     verEl.innerHTML = META.version
       ? 'الإصدار <b>'+(META.version||'?')+'</b> • تحديث '+(META.updated||'?')+' • '+DATA.length+' موديل'
@@ -834,6 +861,82 @@ function renderWiper(){
   }
   LAST=rows;
   paint();
+}
+/* ================= القوايش ================= */
+function cardHtmlBelt(d){
+  return '<div class="card">'+
+    '<div class="brand">MITSUBA AL-MAS'+(d.t?' &bull; '+d.t:'')+'</div>'+
+    '<div class="model">'+(d.car||'—')+'</div>'+
+    '<div class="pads">'+
+    '<div class="pad" style="flex:1"><div class="lbl">رقم القايش</div>'+
+    '<div class="num'+(d.code?'':' none')+'">'+(d.code||'—')+'</div>'+
+    (d.code?'<button class="cp" onclick="copyNum(\''+d.code.replace(/'/g,'')+'\')">&#128203; نسخ الرقم</button>':'')+'</div>'+
+    '</div>'+
+    '</div>';
+}
+function ingestBelt(j){
+  LMETA=j||{};
+  LDATA=(j&&j.rows||[]).map(r=>{
+    const o={car:r[0]||'',code:r[1]||'',t:r[2]||''};
+    o._h=norm([o.car,o.code,o.t].join(' '));
+    o._hw=o._h.split(/\s+/);
+    o._nm=norm([o.car].join(' '));
+    o._nw=o._nm.split(/\s+/).filter(Boolean);
+    return o;
+  });
+  renderVerLine();
+}
+function renderBelt(){
+  const raw=norm(qEl.value.trim());
+  const tokens=raw?raw.split(/\s+/).map(canon).filter(Boolean):[];
+  const words=tokens;
+  const scored=[];
+  for(const d of LDATA){
+    if(activeTypeL!=='الكل'&&d.t!==activeTypeL) continue;
+    let ok=true,score=0;
+    if(words.length){
+      const hay=d._h, hw=d._hw, nm=d._nm, nw=d._nw;
+      for(const w of words){
+        if(nw.includes(w)){ score+=400; continue; }
+        if(nw.some(x=>x.startsWith(w))){ score+=200; continue; }
+        if(nm.includes(w)){ score+=60; continue; }
+        if(hay.includes(w)){ score+=20; continue; }
+        let fz=false;
+        if(w.length>=4){ for(const h of hw){ if(lev1(w,h)){fz=true;break;} } }
+        if(fz) score+=1; else {ok=false;break;}
+      }
+    }
+    if(ok) scored.push([score,d]);
+  }
+  scored.sort((a,b)=>b[0]-a[0]);
+  const rows=scored.map(x=>x[1]);
+  cntEl.textContent='عدد النتائج: '+rows.length;
+  if(!words.length && activeTypeL==='الكل'){
+    resEl.innerHTML='<div class="empty">'+
+      '<div style="font-size:1.15em;color:var(--accent);font-weight:700;margin-bottom:8px">'+LDATA.length+' نتيجة قوايش جاهزة للبحث</div>'+
+      'اكتب اسم السيارة في الأعلى — مثال: <b>كورولا</b> أو <b>سوناتا</b><br>'+
+      'أو اختر نوع القايش من الأعلى'+
+      '</div>';
+    LAST=[]; return;
+  }
+  if(!rows.length){
+    resEl.innerHTML='<div class="empty">لا نتائج مطابقة<br><span style="font-size:.9em">جرّب اسماً آخر أو رقم القايش</span></div>';
+    return;
+  }
+  LAST=rows;
+  paint();
+}
+async function loadBeltData(){
+  const cached=sget('ldata');
+  if(cached){ try{ ingestBelt(JSON.parse(cached)); if(MODE==='belt'){drawChips();render();} }catch(e){} }
+  try{
+    const r=await fetch('belts.json?t='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    sset('ldata', JSON.stringify(j));
+    ingestBelt(j);
+    if(MODE==='belt'){ drawChips(); render(); }
+  }catch(e){}
 }
 async function loadWiperData(){
   const cached=sget('wdata');
@@ -954,6 +1057,7 @@ try{
   loadData();
   loadBearingData();
   loadWiperData();
+  loadBeltData();
   setInterval(()=>checkUpdate(false), 6*60*60*1000);
   window.addEventListener('online',()=>checkUpdate(false));
 }catch(err){
