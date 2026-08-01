@@ -553,17 +553,23 @@ function renderVerLine(){
 /* ================= ماسحات الزجاج ================= */
 function cardHtmlWiper(d){
   const ar=AR_MODEL[d.m.toLowerCase().split(' (')[0]]||'';
+  const fMain=d.fd||d.f||'—';
+  const rMain=d.rd||d.r||'—';
+  const fSub=d.fd&&d.f?d.f:'';
+  const rSub=d.rd&&d.r?d.r:'';
   return '<div class="card">'+
     '<div class="brand">Bosch &bull; '+d.b+'</div>'+
     '<div class="model">'+(ar?ar+' <span class="en">'+d.m+'</span>':d.m)+'</div>'+
     '<div class="years">موديل: '+(d.y||'—')+'</div>'+
     '<div class="pads">'+
-    '<div class="pad" style="flex:1"><div class="lbl">الأمامي (AeroTwin)</div>'+
-    '<div class="num">'+(d.f||'—')+'</div>'+
-    (d.f?'<button class="cp" onclick="copyNum(\''+d.f.replace(/'/g,'')+'\')">&#128203; نسخ</button>':'')+'</div>'+
-    '<div class="pad" style="flex:1"><div class="lbl">الخلفي</div>'+
-    '<div class="num'+(d.r?'':' none')+'">'+(d.r||'—')+'</div>'+
-    (d.r?'<button class="cp" onclick="copyNum(\''+d.r.replace(/'/g,'')+'\')">&#128203; نسخ</button>':'')+'</div>'+
+    '<div class="pad" style="flex:1"><div class="lbl">الأمامي (مقاس)</div>'+
+    '<div class="num">'+fMain+'</div>'+
+    (fSub?'<div style="font-size:.78em;opacity:.6;margin-top:2px">'+fSub+'</div>':'')+
+    (d.f?'<button class="cp" onclick="copyNum(\''+d.f.replace(/'/g,'')+'\')">&#128203; نسخ الرمز</button>':'')+'</div>'+
+    '<div class="pad" style="flex:1"><div class="lbl">الخلفي (مقاس)</div>'+
+    '<div class="num'+(rMain==='—'?' none':'')+'">'+rMain+'</div>'+
+    (rSub?'<div style="font-size:.78em;opacity:.6;margin-top:2px">'+rSub+'</div>':'')+
+    (d.r?'<button class="cp" onclick="copyNum(\''+d.r.replace(/'/g,'')+'\')">&#128203; نسخ الرمز</button>':'')+'</div>'+
     '</div>'+
     (d.alt?'<div class="years" style="color:var(--blue);opacity:.85">أرقام بديلة: '+d.alt+'</div>':'')+
     '</div>';
@@ -571,7 +577,7 @@ function cardHtmlWiper(d){
 function ingestWiper(j){
   WMETA=j||{};
   WDATA=(j&&j.rows||[]).map(r=>{
-    const o={b:r[0],m:r[1],y:r[2],f:r[3],r:r[4]||'',alt:r[5]||''};
+    const o={b:r[0],m:r[1],y:r[2],f:r[3],r:r[4]||'',alt:r[5]||'',fd:r[6]||'',rd:r[7]||''};
     const ar=AR_MODEL[o.m.toLowerCase().split(' (')[0]]||'';
     o._h=norm([o.b,o.m,o.y,o.f,o.r,o.alt,ar].join(' '));
     o._hw=o._h.split(/\s+/);
@@ -719,6 +725,10 @@ async function install(){
   deferred=null; document.getElementById('instBtn').style.display='none';
 }
 if('serviceWorker' in navigator && location.protocol!=='file:'){
+  let swRefreshing=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(swRefreshing) return; swRefreshing=true; location.reload();
+  });
   navigator.serviceWorker.register('sw.js').then(reg=>{
     reg.addEventListener('updatefound',()=>{
       const nw=reg.installing;

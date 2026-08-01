@@ -1,6 +1,6 @@
 /* محل الصافي — Service Worker
    ارفع الرقم في CACHE عند كل تحديث للتطبيق */
-const CACHE = 'safi-v13';
+const CACHE = 'safi-v16';
 const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './logo-header.png'];
 
 self.addEventListener('install', e => {
@@ -35,7 +35,18 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // الملفات: المحفوظ أولاً ثم الشبكة، مع تحديث الخلفية
+  // غلاف التطبيق (index.html والمسار الجذري): الشبكة أولاً دائماً حتى تظهر التحديثات فوراً
+  if (url.pathname.endsWith('index.html') || url.pathname === '/' || url.pathname.endsWith('/تطبيق-الصافي/') || req.mode === 'navigate') {
+    e.respondWith(
+      fetch(req).then(r => {
+        if (r && r.ok) caches.open(CACHE).then(c => c.put(req, r.clone()));
+        return r;
+      }).catch(() => caches.match(req).then(hit => hit || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // باقي الملفات الثابتة: المحفوظ أولاً ثم الشبكة، مع تحديث الخلفية
   e.respondWith(
     caches.match(req).then(hit => {
       const net = fetch(req).then(r => {
