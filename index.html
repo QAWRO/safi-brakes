@@ -265,7 +265,7 @@ function setMode(m){
   posChipsEl.style.display = m==='bearing' ? 'flex' : 'none';
   qEl.placeholder = m==='disc' ? 'اكتب: النترا 2013 امامي ، sonata ، SP1400 ...' : 'اكتب: كورولا امامي ، سوناتا خلفي ، 770-0345 ...';
   qEl.value='';
-  drawPosChips(); drawChips(); render();
+  drawPosChips(); drawChips(); renderVerLine(); render();
 }
 function drawPosChips(){
   if(MODE!=='bearing'){ posChipsEl.innerHTML=''; return; }
@@ -504,6 +504,22 @@ function ingestBearing(gmbJ, iljinJ){
     gmbJ ? rowsToBData(gmbJ,'GMB') : [],
     iljinJ ? rowsToBData(iljinJ,'ILJIN') : []
   );
+  renderVerLine();
+}
+function renderVerLine(){
+  const verEl=document.getElementById('ver');
+  if(MODE==='bearing'){
+    const parts=[];
+    if(BMETA.gmb) parts.push('GMB v'+(BMETA.gmb.version||'?')+' (تحديث '+(BMETA.gmb.updated||'?')+')');
+    if(BMETA.iljin) parts.push('ILJIN v'+(BMETA.iljin.version||'?')+' (تحديث '+(BMETA.iljin.updated||'?')+')');
+    verEl.innerHTML = parts.length
+      ? parts.join(' • ')+' • '+BDATA.length+' نتيجة'
+      : 'جارٍ التحميل…';
+  } else {
+    verEl.innerHTML = META.version
+      ? 'الإصدار <b>'+(META.version||'?')+'</b> • تحديث '+(META.updated||'?')+' • '+DATA.length+' موديل'
+      : 'جارٍ التحميل…';
+  }
 }
 async function loadBearingData(){
   const cached=sget('bdata2');
@@ -532,8 +548,7 @@ function ingest(j){
     o._nw=o._nm.split(/\s+/).filter(Boolean);
     return o;
   });
-  document.getElementById('ver').innerHTML =
-    'الإصدار <b>'+(j.version||'?')+'</b> • تحديث '+(j.updated||'?')+' • '+DATA.length+' موديل';
+  renderVerLine();
   drawChips(); render();
 }
 async function loadData(){
