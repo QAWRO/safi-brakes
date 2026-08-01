@@ -224,6 +224,7 @@
     <button class="tabbtn" id="tabBearing" onclick="setMode('bearing')">&#9881;&#65039; بولبرن (بيرنق)</button>
     <button class="tabbtn" id="tabWiper" onclick="setMode('wiper')">&#129386; ماسحات الزجاج</button>
     <button class="tabbtn" id="tabBelt" onclick="setMode('belt')">&#128736;&#65039; قوايش</button>
+    <button class="tabbtn" id="tabFilter" onclick="setMode('filter')">&#129527; فلاتر</button>
   </div>
 
   <div class="searchbox">
@@ -254,6 +255,10 @@
   <footer id="footerBelt" style="display:none">
     بيانات القوايش من الوكيل الرسمي الوحيد في العراق لقوايش <b>متسوبا (MITSUBA AL-MAS)</b> — بغداد، السنك.<br>
     للتواصل: 07904295996 — 07702505211 — مستعدون لتصنيع وتجهيز أي حجم قايش حسب الطلب.<br>يُرجى التحقق من أي رقم قبل التركيب.<br>
+    <span style="color:var(--accent); font-weight:700">محل الصافي</span> — لقطع غيار وفرامل السيارات
+  </footer>
+  <footer id="footerFilter" style="display:none">
+    بيانات فلاتر التبريد (المكيف) والهواء والبطارية من كتالوج <b>KEEP FILTER</b> الرسمي.<br>يُرجى التحقق من أي رقم قبل التركيب.<br>
     <span style="color:var(--accent); font-weight:700">محل الصافي</span> — لقطع غيار وفرامل السيارات
   </footer>
 </div>
@@ -408,6 +413,7 @@ let MODE='disc';
 let BDATA=[], BMETA={}, activeBrandB='الكل', posFilterB='الكل';
 let WDATA=[], WMETA={}, activeBrandW='الكل';
 let LDATA=[], LMETA={}, activeTypeL='الكل';
+let KDATA=[], KMETA={}, activeTypeK='الكل';
 const qEl=document.getElementById('q'), resEl=document.getElementById('results'),
       cntEl=document.getElementById('count'), chipsEl=document.getElementById('chips'),
       posChipsEl=document.getElementById('posChips');
@@ -418,14 +424,17 @@ function setMode(m){
   document.getElementById('tabBearing').classList.toggle('on', m==='bearing');
   document.getElementById('tabWiper').classList.toggle('on', m==='wiper');
   document.getElementById('tabBelt').classList.toggle('on', m==='belt');
+  document.getElementById('tabFilter').classList.toggle('on', m==='filter');
   document.getElementById('footerDisc').style.display = m==='disc' ? '' : 'none';
   document.getElementById('footerBearing').style.display = m==='bearing' ? '' : 'none';
   document.getElementById('footerWiper').style.display = m==='wiper' ? '' : 'none';
   document.getElementById('footerBelt').style.display = m==='belt' ? '' : 'none';
+  document.getElementById('footerFilter').style.display = m==='filter' ? '' : 'none';
   posChipsEl.style.display = m==='bearing' ? 'flex' : 'none';
   qEl.placeholder = m==='disc' ? 'اكتب: النترا 2013 امامي ، sonata ، SP1400 ...'
     : m==='bearing' ? 'اكتب: كورولا امامي ، سوناتا خلفي ، 770-0345 ...'
     : m==='belt' ? 'اكتب: كورولا ، سوناتا ، 6PK1200 ...'
+    : m==='filter' ? 'اكتب: توسان ، سوناتا ، 28113 ...'
     : 'اكتب: النترا ، افيو ، كروز ...';
   qEl.value='';
   drawPosChips(); drawChips(); renderVerLine(); render();
@@ -475,6 +484,17 @@ function drawChips(){
     });
     return;
   }
+  if(MODE==='filter'){
+    const set=['الكل']; KDATA.forEach(d=>{ if(d.type&&!set.includes(d.type)) set.push(d.type); });
+    chipsEl.innerHTML='';
+    set.forEach(t=>{
+      const c=document.createElement('button');
+      c.className='chip'+(t===activeTypeK?' on':''); c.textContent=t;
+      c.onclick=()=>{ activeTypeK=t; render(); };
+      chipsEl.appendChild(c);
+    });
+    return;
+  }
   const set=['الكل']; DATA.forEach(d=>{ if(d.ba&&!set.includes(d.ba)) set.push(d.ba); });
   chipsEl.innerHTML='';
   set.forEach(b=>{
@@ -510,6 +530,7 @@ function render(){
   if(MODE==='bearing'){ renderBearing(); return; }
   if(MODE==='wiper'){ renderWiper(); return; }
   if(MODE==='belt'){ renderBelt(); return; }
+  if(MODE==='filter'){ renderFilter(); return; }
   renderDisc();
 }
 function renderDisc(){
@@ -569,6 +590,7 @@ function cardHtml(d){
   if(MODE==='bearing') return cardHtmlBearing(d);
   if(MODE==='wiper') return cardHtmlWiper(d);
   if(MODE==='belt') return cardHtmlBelt(d);
+  if(MODE==='filter') return cardHtmlFilter(d);
   return cardHtmlDisc(d);
 }
 function cardHtmlDisc(d){
@@ -774,6 +796,10 @@ function renderVerLine(){
     verEl.innerHTML = LMETA.version
       ? 'MITSUBA v'+(LMETA.version||'?')+' (تحديث '+(LMETA.updated||'?')+') • '+LDATA.length+' نتيجة'
       : 'جارٍ التحميل…';
+  } else if(MODE==='filter'){
+    verEl.innerHTML = KMETA.version
+      ? 'KEEP v'+(KMETA.version||'?')+' (تحديث '+(KMETA.updated||'?')+') • '+KDATA.length+' نتيجة'
+      : 'جارٍ التحميل…';
   } else {
     verEl.innerHTML = META.version
       ? 'الإصدار <b>'+(META.version||'?')+'</b> • تحديث '+(META.updated||'?')+' • '+DATA.length+' موديل'
@@ -938,6 +964,83 @@ async function loadBeltData(){
     if(MODE==='belt'){ drawChips(); render(); }
   }catch(e){}
 }
+/* ================= فلاتر KEEP ================= */
+function cardHtmlFilter(d){
+  return '<div class="card">'+
+    '<div class="brand">KEEP'+(d.type?' &bull; '+d.type:'')+'</div>'+
+    '<div class="model">'+(d.car||'—')+'</div>'+
+    (d.note?'<div class="years" style="color:var(--blue);opacity:.85">'+d.note+'</div>':'')+
+    '<div class="pads">'+
+    '<div class="pad" style="flex:1"><div class="lbl">رقم الفلتر</div>'+
+    '<div class="num'+(d.code?'':' none')+'">'+(d.code||'—')+'</div>'+
+    (d.code?'<button class="cp" onclick="copyNum(\''+d.code.replace(/'/g,'')+'\')">&#128203; نسخ الرقم</button>':'')+'</div>'+
+    '</div>'+
+    '</div>';
+}
+function ingestFilter(j){
+  KMETA=j||{};
+  KDATA=(j&&j.rows||[]).map(r=>{
+    const o={car:r[0]||'',type:r[1]||'',code:r[2]||'',note:r[3]||''};
+    o._h=norm([o.car,o.type,o.code,o.note].join(' '));
+    o._hw=o._h.split(/\s+/);
+    o._nm=norm([o.car].join(' '));
+    o._nw=o._nm.split(/\s+/).filter(Boolean);
+    return o;
+  });
+  renderVerLine();
+}
+function renderFilter(){
+  const raw=norm(qEl.value.trim());
+  const tokens=raw?raw.split(/\s+/).map(canon).filter(Boolean):[];
+  const words=tokens;
+  const scored=[];
+  for(const d of KDATA){
+    if(activeTypeK!=='الكل'&&d.type!==activeTypeK) continue;
+    let ok=true,score=0;
+    if(words.length){
+      const hay=d._h, hw=d._hw, nm=d._nm, nw=d._nw;
+      for(const w of words){
+        if(nw.includes(w)){ score+=400; continue; }
+        if(nw.some(x=>x.startsWith(w))){ score+=200; continue; }
+        if(nm.includes(w)){ score+=60; continue; }
+        if(hay.includes(w)){ score+=20; continue; }
+        let fz=false;
+        if(w.length>=4){ for(const h of hw){ if(lev1(w,h)){fz=true;break;} } }
+        if(fz) score+=1; else {ok=false;break;}
+      }
+    }
+    if(ok) scored.push([score,d]);
+  }
+  scored.sort((a,b)=>b[0]-a[0]);
+  const rows=scored.map(x=>x[1]);
+  cntEl.textContent='عدد النتائج: '+rows.length;
+  if(!words.length && activeTypeK==='الكل'){
+    resEl.innerHTML='<div class="empty">'+
+      '<div style="font-size:1.15em;color:var(--accent);font-weight:700;margin-bottom:8px">'+KDATA.length+' نتيجة فلاتر KEEP جاهزة للبحث</div>'+
+      'اكتب اسم السيارة في الأعلى — مثال: <b>توسان</b> أو <b>سوناتا</b><br>'+
+      'أو اختر نوع الفلتر من الأعلى (تبريد / شوته)'+
+      '</div>';
+    LAST=[]; return;
+  }
+  if(!rows.length){
+    resEl.innerHTML='<div class="empty">لا نتائج مطابقة<br><span style="font-size:.9em">جرّب اسماً آخر أو رقم الفلتر</span></div>';
+    return;
+  }
+  LAST=rows;
+  paint();
+}
+async function loadFilterData(){
+  const cached=sget('kdata');
+  if(cached){ try{ ingestFilter(JSON.parse(cached)); if(MODE==='filter'){drawChips();render();} }catch(e){} }
+  try{
+    const r=await fetch('keep_filters.json?t='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    sset('kdata', JSON.stringify(j));
+    ingestFilter(j);
+    if(MODE==='filter'){ drawChips(); render(); }
+  }catch(e){}
+}
 async function loadWiperData(){
   const cached=sget('wdata');
   if(cached){ try{ ingestWiper(JSON.parse(cached)); if(MODE==='wiper'){drawChips();render();} }catch(e){} }
@@ -1058,6 +1161,7 @@ try{
   loadBearingData();
   loadWiperData();
   loadBeltData();
+  loadFilterData();
   setInterval(()=>checkUpdate(false), 6*60*60*1000);
   window.addEventListener('online',()=>checkUpdate(false));
 }catch(err){
