@@ -107,6 +107,39 @@
   .tabbtn.on{background:var(--grad); color:#05100f; border-color:var(--accent); box-shadow:0 3px 14px rgba(22,224,196,.3)}
   .pos{display:inline-block; font-size:calc(11px * var(--fs)); color:var(--bg); background:var(--accent);
     padding:2px 8px; border-radius:999px; font-weight:700; margin-inline-start:6px}
+  .modal-ov{position:fixed; inset:0; background:rgba(0,0,0,.65); backdrop-filter:blur(3px);
+    display:none; align-items:center; justify-content:center; z-index:999; padding:14px}
+  .modal-ov.on{display:flex}
+  .modal{background:var(--card); border:1px solid var(--border); border-radius:16px;
+    max-width:520px; width:100%; max-height:88vh; overflow:auto; box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .modal-head{display:flex; align-items:center; justify-content:space-between; padding:14px 16px;
+    border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--card); z-index:2}
+  .modal-head h3{font-size:1.05em}
+  .modal-close{background:none; border:none; color:var(--muted); font-size:1.3em; cursor:pointer; line-height:1}
+  .modal-close:hover{color:var(--text)}
+  .modal-tabs{display:flex; gap:6px; padding:10px 16px 0}
+  .modal-tabbtn{flex:1; background:var(--card2); border:1px solid var(--border); color:var(--muted);
+    padding:8px 6px; border-radius:10px 10px 0 0; cursor:pointer; font-size:.88em; font-family:inherit}
+  .modal-tabbtn.on{background:var(--grad); color:#04201d; font-weight:700; border-color:transparent}
+  .modal-body{padding:16px}
+  .modal-pane{display:none}
+  .modal-pane.on{display:block}
+  .clr-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 0;
+    border-bottom:1px solid var(--border)}
+  .clr-row:last-child{border-bottom:none}
+  .clr-row label{font-size:.9em; color:var(--muted)}
+  .clr-row input[type=color]{width:44px; height:32px; border:none; border-radius:8px; background:none; cursor:pointer; padding:0}
+  .about-card{text-align:center; padding:8px 0}
+  .about-card .an{font-weight:800; font-size:1.1em; color:var(--accent); margin-bottom:4px}
+  .about-card .adev{color:var(--text); margin:10px 0 2px}
+  .about-card .adevname{font-weight:700}
+  .about-links{display:flex; flex-direction:column; gap:8px; margin-top:14px}
+  .about-links a{display:flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--card2); border:1px solid var(--border); border-radius:10px; padding:10px;
+    color:var(--text); text-decoration:none; font-size:.92em}
+  .about-links a:hover{border-color:var(--accent)}
+  .modal-actions{display:flex; gap:8px; margin-top:14px}
+  .modal-actions .btn{flex:1; justify-content:center}
 </style>
 </head>
 <body>
@@ -124,10 +157,67 @@
       <button class="fbtn" onclick="setFs(0)" style="font-size:12px">&#8635;</button>
       <button class="btn" onclick="checkUpdate(true)">&#128260; تحقق من التحديث</button>
       <button class="btn" id="instBtn" style="display:none" onclick="install()">&#11015; تثبيت التطبيق</button>
+      <button class="btn" onclick="openSettings()">&#9881;&#65039; الإعدادات</button>
     </div>
   </header>
 
   <div id="banners"></div>
+
+  <div class="modal-ov" id="settingsOv" onclick="if(event.target===this) closeSettings()">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>&#9881;&#65039; الإعدادات</h3>
+        <button class="modal-close" onclick="closeSettings()">&#10006;</button>
+      </div>
+      <div class="modal-tabs">
+        <button class="modal-tabbtn on" id="stabColors" onclick="setSTab('colors')">&#127912; الألوان</button>
+        <button class="modal-tabbtn" id="stabAbout" onclick="setSTab('about')">&#8505;&#65039; عن التطبيق</button>
+        <button class="modal-tabbtn" id="stabGeneral" onclick="setSTab('general')">&#9881;&#65039; عام</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-pane on" id="spaneColors">
+          <div class="clr-row"><label>اللون الرئيسي (فيروزي)</label><input type="color" id="cAccent" onchange="applyTheme()"></div>
+          <div class="clr-row"><label>اللون الثانوي</label><input type="color" id="cAccent2" onchange="applyTheme()"></div>
+          <div class="clr-row"><label>لون الأزرق</label><input type="color" id="cBlue" onchange="applyTheme()"></div>
+          <div class="clr-row"><label>لون التنبيه (أحمر)</label><input type="color" id="cRed" onchange="applyTheme()"></div>
+          <div class="clr-row"><label>لون النجاح (أخضر)</label><input type="color" id="cGreen" onchange="applyTheme()"></div>
+          <div class="clr-row"><label>خلفية التطبيق</label><input type="color" id="cBg" onchange="applyTheme()"></div>
+          <div class="clr-row"><label>خلفية البطاقات</label><input type="color" id="cCard" onchange="applyTheme()"></div>
+          <div class="clr-row"><label>لون النص</label><input type="color" id="cText" onchange="applyTheme()"></div>
+          <div class="modal-actions">
+            <button class="btn" onclick="resetTheme()">&#8635; إعادة تعيين الألوان الافتراضية</button>
+          </div>
+        </div>
+        <div class="modal-pane" id="spaneAbout">
+          <div class="about-card">
+            <div class="an">محل الصافي</div>
+            <div>لقطع غيار وفرامل السيارات</div>
+            <div class="adev">تطوير:<br><span class="adevname">المهندس حسين حيدر عبد اللطيف</span></div>
+          </div>
+          <div class="about-links">
+            <a href="tel:07829809852">&#128222; 07829809852</a>
+            <a href="mailto:husseinhaidereirc@gmail.com">&#9993;&#65039; husseinhaidereirc@gmail.com</a>
+          </div>
+        </div>
+        <div class="modal-pane" id="spaneGeneral">
+          <div class="clr-row"><label>حجم الخط</label>
+            <span>
+              <button class="fbtn" onclick="setFs(-1)">&minus;</button>
+              <span id="fsVal2">100%</span>
+              <button class="fbtn" onclick="setFs(1)">+</button>
+            </span>
+          </div>
+          <div class="modal-actions">
+            <button class="btn" onclick="checkUpdate(true)">&#128260; تحقق من التحديث</button>
+          </div>
+          <div class="modal-actions">
+            <button class="btn" id="instBtn2" style="display:none" onclick="install()">&#11015; تثبيت التطبيق</button>
+          </div>
+          <div style="text-align:center; color:var(--muted); font-size:.82em; margin-top:14px" id="ver2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="tabs">
     <button class="tabbtn on" id="tabDisc" onclick="setMode('disc')">&#128664; دسكات الفرامل</button>
@@ -175,9 +265,61 @@ let fsIdx=+(sget('fs')||1); if(!(fsIdx>=0&&fsIdx<FS.length)) fsIdx=1;
 function applyFs(){
   document.documentElement.style.setProperty('--fs',FS[fsIdx]);
   document.getElementById('fsVal').textContent=Math.round(FS[fsIdx]*100)+'%';
+  const v2=document.getElementById('fsVal2'); if(v2) v2.textContent=Math.round(FS[fsIdx]*100)+'%';
   sset('fs',String(fsIdx));
 }
 function setFs(d){ fsIdx = d===0?1:Math.min(FS.length-1,Math.max(0,fsIdx+d)); applyFs(); }
+
+/* ================= الإعدادات: الثيم والمعلومات ================= */
+const DEFAULT_THEME={accent:'#16e0c4',accent2:'#0a9c8c',blue:'#2bc4c9',red:'#ff6b6b',green:'#2fe0af',bg:'#070f10',card:'#0e1a1b',text:'#eaf6f4'};
+const THEME_MAP={accent:'--accent',accent2:'--accent2',blue:'--blue',red:'--red',green:'--green',bg:'--bg',card:'--card',text:'--text'};
+function loadTheme(){
+  let t={};
+  try{ t=JSON.parse(sget('theme')||'{}'); }catch(e){ t={}; }
+  return Object.assign({},DEFAULT_THEME,t);
+}
+function paintTheme(t){
+  const root=document.documentElement.style;
+  Object.keys(THEME_MAP).forEach(k=>root.setProperty(THEME_MAP[k],t[k]));
+  const mc=document.querySelector('meta[name=theme-color]'); if(mc) mc.setAttribute('content',t.bg);
+}
+function fillThemeInputs(t){
+  Object.keys(THEME_MAP).forEach(k=>{
+    const el=document.getElementById('c'+k.charAt(0).toUpperCase()+k.slice(1));
+    if(el) el.value=t[k];
+  });
+}
+function applyTheme(){
+  const t={};
+  Object.keys(THEME_MAP).forEach(k=>{
+    const el=document.getElementById('c'+k.charAt(0).toUpperCase()+k.slice(1));
+    t[k]=el?el.value:DEFAULT_THEME[k];
+  });
+  paintTheme(t);
+  sset('theme',JSON.stringify(t));
+}
+function resetTheme(){
+  paintTheme(DEFAULT_THEME);
+  fillThemeInputs(DEFAULT_THEME);
+  sset('theme',JSON.stringify(DEFAULT_THEME));
+  toast('تمت إعادة تعيين الألوان');
+}
+(function initTheme(){ const t=loadTheme(); paintTheme(t); })();
+
+function openSettings(){
+  fillThemeInputs(loadTheme());
+  const v=document.getElementById('ver'); const v2=document.getElementById('ver2');
+  if(v&&v2) v2.textContent=v.textContent;
+  document.getElementById('settingsOv').classList.add('on');
+}
+function closeSettings(){ document.getElementById('settingsOv').classList.remove('on'); }
+function setSTab(name){
+  ['colors','about','general'].forEach(n=>{
+    document.getElementById('stab'+n.charAt(0).toUpperCase()+n.slice(1)).classList.toggle('on',n===name);
+    document.getElementById('spane'+n.charAt(0).toUpperCase()+n.slice(1)).classList.toggle('on',n===name);
+  });
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSettings(); });
 document.addEventListener('keydown',e=>{
   if(!(e.ctrlKey||e.metaKey)) return;
   if(e.key==='+'||e.key==='='){e.preventDefault();setFs(1);}
@@ -718,11 +860,13 @@ let deferred=null;
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault(); deferred=e;
   document.getElementById('instBtn').style.display='';
+  const b2=document.getElementById('instBtn2'); if(b2) b2.style.display='';
 });
 async function install(){
   if(!deferred) return;
   deferred.prompt(); await deferred.userChoice;
   deferred=null; document.getElementById('instBtn').style.display='none';
+  const b2=document.getElementById('instBtn2'); if(b2) b2.style.display='none';
 }
 if('serviceWorker' in navigator && location.protocol!=='file:'){
   let swRefreshing=false;
